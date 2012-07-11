@@ -4,6 +4,7 @@
     var Check = function(field) {
         var validators = [];
         var conditions = [];
+        var customFieldName = field;
         var message;
         var invert = false;
         var inverter = function(func,record) {
@@ -129,7 +130,7 @@
             Equal: function(value) {
                 add(function(record) {
                     if (record[field] !== value) {
-                        return message || field + " must equal " + value;
+                        return message || customFieldName + " must equal " + value;
                     }
                 });
                 return this;
@@ -137,7 +138,7 @@
             Required: function() {
                 add(function(record) {
                     if (record[field] === undefined || record[field] === "") {
-                        return message || field + " is required";
+                        return message || customFieldName + " is required";
                     }
                 });
                 return this;
@@ -147,7 +148,7 @@
             Length: function(length) {
                 add(function(record) {
                     if (record[field].length !== length) {
-                        return message || field + " must be " + length + " characters";
+                        return message || customFieldName + " must be " + length + " characters";
                     }
                 });
                 return this;
@@ -155,7 +156,7 @@
             MaxLength: function(length) {
                 add(function(record) {
                     if (record[field].length > length) {
-                        return message || field + " must be less than " + length + " characters";
+                        return message || customFieldName + " must be less than " + length + " characters";
                     }
                 });
                 return this;
@@ -163,7 +164,7 @@
             MinLength: function(length) {
                 add(function(record) {
                     if (record[field].length < length) {
-                        return message || field + " must be greater than " + length + " characters";
+                        return message || customFieldName + " must be greater than " + length + " characters";
                     }
                 });
                 return this;
@@ -177,7 +178,7 @@
                                 value;
 
                     if (record[field] >= val) {
-                        return message || field + " must be less than " + val;
+                        return message || customFieldName + " must be less than " + val;
                     }
                 });
                 return this;
@@ -189,7 +190,7 @@
                                 value;
 
                     if (record[field] > val) {
-                        return message || field + " must be less than or equal to " + val;
+                        return message || customFieldName + " must be less than or equal to " + val;
                     }
                 });
                 return this;
@@ -201,7 +202,7 @@
                                 value;
 
                     if (record[field] <= val) {
-                        return message || field + " must be greater than " + val;
+                        return message || customFieldName + " must be greater than " + val;
                     }
                 });
                 return this;
@@ -213,7 +214,7 @@
                                 value;
 
                     if (record[field] < val) {
-                        return message || field + " must be greater than or equal to " + val;
+                        return message || customFieldName + " must be greater than or equal to " + val;
                     }
                 });
                 return this;
@@ -223,7 +224,7 @@
                     if (typeof record[field] === "undefined")  { return; }
                     
                     if (record[field] < min || record[field] > max) {
-                        return message || field + " is not between " + min + " and " + max;
+                        return message || customFieldName + " is not between " + min + " and " + max;
                     }
                 });
                 return this;
@@ -233,7 +234,7 @@
             NotNull: function() {
                 add(function(record) {
                     if (typeof record[field] === "undefined" || record[field] === null) {
-                        return message || field + " must not be null";
+                        return message || customFieldName + " must not be null";
                     }
                 });
                 return this;
@@ -242,7 +243,7 @@
                 add(function(record) {
                     if (typeof record[field] === "undefined" || record[field] === null) { return; }
                     if (record[field].length === 0) {
-                        return message || field + " must not be blank";
+                        return message || customFieldName + " must not be blank";
                     }
                 });
                 return this;
@@ -250,7 +251,7 @@
             NotEqual: function(value) {
                 add(function(record) {
                     if (record[field] === value) {
-                        return message || field + " must not equal " + value;
+                        return message || customFieldName + " must not equal " + value;
                     }
                 });
                 return this;
@@ -260,7 +261,7 @@
             Matches: function(regex) {
                 add(function(record) {
                     if (!record[field].match(regex)) {
-                        return message || field + " failed validation";
+                        return message || customFieldName + " failed validation";
                     }
                 });
                 return this;
@@ -268,7 +269,7 @@
             IsAlpha: function() {
                 add(function(record) {
                     if (record[field] !== undefined && !record[field].match(/[A-Za-z]+/i)) {
-                        return message || field + " must be alpha";
+                        return message || customFieldName + " must be alpha";
                     }
                 });
                 return this;
@@ -276,7 +277,7 @@
             IsNumeric: function() {
                 add(function(record) {
                     if (record[field] !== undefined && !(record[field]+'').match(/[0-9\.]+/)) {
-                        return message || field + " must be numeric";
+                        return message || customFieldName + " must be numeric";
                     }
                 });
                 return this;
@@ -343,7 +344,7 @@
                 add(function(record) {
                     if (typeof record[field] === "undefined" || record[field] === null) { return; }
                     if (!record[field].match(regex)) {
-                        return message || field + " failed validation";
+                        return message || customFieldName + " failed validation";
                     }
                 });
                 return this;
@@ -353,7 +354,7 @@
             Must: function(func) {
                 add(function(record) {
                     if (!func(record[field],record)) {
-                        return message || field + " failed validation";
+                        return message || customFieldName + " failed validation";
                     }
                 });
                 return this;  
@@ -366,7 +367,7 @@
 
                     var date = new Date(record[field]);
                     if (date.toString() === "NaN" || date.toString() === "Invalid Date") {
-                        return message || field + " is not a date";
+                        return message || customFieldName + " is not a date";
                     }
                 });
                 return this;
@@ -377,7 +378,7 @@
 
                     var d = new Date();
                     if (new Date(record[field]).getTime() > new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()) {
-                        return message || field + " cannot be in the future";
+                        return message || customFieldName + " cannot be in the future";
                     }
                 });
                 return this;
@@ -388,7 +389,7 @@
 
                     var d = new Date();
                     if (new Date(record[field]).getTime() < new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()) {
-                        return message || field + " cannot be in the past";
+                        return message || customFieldName + " cannot be in the past";
                     }
                 });
                 return this;                
@@ -402,7 +403,7 @@
                     var date = new Date(record[field]);
                     var futureDate = new Date(record[compareField]);
                     if (date >= futureDate) {
-                        return message || field + " must come before " + compareField;
+                        return message || customFieldName + " must come before " + compareField;
                     }
                 });
                 return this;
@@ -416,7 +417,7 @@
                     var date = new Date(record[field]);
                     var futureDate = new Date(record[compareField]);
                     if (date > futureDate) {
-                        return message || field + " must come before or equal " + compareField;
+                        return message || customFieldName + " must come before or equal " + compareField;
                     }
                 });
                 return this;
@@ -430,7 +431,7 @@
                     var date = new Date(record[field]);
                     var pastDate = new Date(record[compareField]);
                     if (date <= pastDate) {
-                        return message || field + " must come after " + compareField;
+                        return message || customFieldName + " must come after " + compareField;
                     }
                 });
                 return this;
@@ -444,7 +445,7 @@
                     var date = new Date(record[field]);
                     var pastDate = new Date(record[compareField]);
                     if (date < pastDate) {
-                        return message || field + " must come after or equal " + compareField;
+                        return message || customFieldName + " must come after or equal " + compareField;
                     }
                 });
                 return this;
@@ -458,7 +459,7 @@
                     var date = new Date(record[field]);
                     var comparisonDate = new Date(record[compareField]);
                     if (+date !== +comparisonDate) {
-                        return message || field + " must equal " + compareField;
+                        return message || customFieldName + " must equal " + compareField;
                     }
                 });
                 return this;
@@ -467,6 +468,11 @@
             /* Message modification */
             Message: function(msg) {
                 message = msg;
+                return this;
+            },
+            
+            Name: function(name) {
+                customFieldName = name || field;
                 return this;
             },
 
